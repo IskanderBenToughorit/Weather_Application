@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-Day Weather Forecast</title>
+  <link href="../src/output.css" rel=stylesheet>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="script.js"></script>
+
+  <style>
+
+  </style>
+</head>
+<body class="bg-blue-100">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <a><span class="text-lg font-semibold">WeatherVIP &#x2600;</span></a>
+    <div class="space-x-4">
+      <a href="#weather" class="hover:underline">Weather</a>
+      <a href="#blog" class="hover:underline">Blog</a>
+      <a href="#subscribe" class="hover:underline">Subscription</a>
+    </div>
+  </nav>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherVIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-blue-100 min-h-screen flex flex-col">
+    
+    <!-- Opening Modal -->
+    <div id="openingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6">
+        <h2 class="text-2xl font-bold mb-4 text-blue-600">Welcome to WeatherVIP</h2>
+        <p class="text-gray-700 mb-6">Choose an option to continue:</p>
+        <button onclick="showSignInForm()" class="bg-blue-500 text-white px-4 py-2 rounded mb-2 w-full hover:bg-blue-600">
+          Sign In
+        </button>
+        <button onclick="showLogInForm()" class="bg-blue-500 text-white px-4 py-2 rounded mb-2 w-full hover:bg-blue-600">
+          Log In
+        </button>
+        <button onclick="continueAsGuest()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-400">
+          Continue as Guest
+        </button>
+      </div>
+    </div>
+    
+    <!-- Sign In Form -->
+    <div id="signInForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6">
+        <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Sign In</h2>
+        <form onsubmit="event.preventDefault(); validateSignIn();">
+          <label for="signInFirstName" class="block mb-2">First Name:</label>
+          <input type="text" id="signInFirstName" class="border w-full p-2 mb-4 rounded" placeholder="Enter your first name" required />
+  
+          <label for="signInLastName" class="block mb-2">Last Name:</label>
+          <input type="text" id="signInLastName" class="border w-full p-2 mb-4 rounded" placeholder="Enter your last name" required />
+          
+          <label for="signInEmail" class="block mb-2">Email:</label>
+          <input type="email" id="signInEmail" class="border w-full p-2 mb-4 rounded" placeholder="Enter your email" required />
+          
+          <label for="signInPassword" class="block mb-2">Password:</label>
+          <input type="password" id="signInPassword" class="border w-full p-2 mb-4 rounded" placeholder="Enter your password" required />
+          
+          <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded w-full mt-4 hover:bg-blue-600">
+            Sign In
+          </button>
+        </form>
+        <button onclick="cancelForm('signInForm')" class="mt-4 text-gray-600">Cancel</button>
+      </div>
+    </div>
+    
+    <!-- Log In Form -->
+    <div id="logInForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Log In</h2>
+        <form onsubmit="event.preventDefault(); validateLogIn();">
+          <label for="logInEmail" class="block mb-2">Email:</label>
+          <input type="email" id="logInEmail" class="border w-full p-2 mb-4 rounded" placeholder="Enter your email" required />
+          
+          <label for="logInPassword" class="block mb-2">Password:</label>
+          <input type="password" id="logInPassword" class="border w-full p-2 mb-4 rounded" placeholder="Enter your password" required />
+          
+          <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded w-full mt-4 hover:bg-blue-600">
+            Log In
+          </button>
+        </form>
+        <button onclick="cancelForm('logInForm')" class="mt-4 text-gray-600">Cancel</button>
+      </div>
+    </div>
+  
+    <!-- Main Application Content -->
+    <div id="mainContent" class="hidden">
+      <h1 class="text-2xl text-blue-600 font-bold text-center mt-4">WeatherVIP</h1>
+      <p class="text-center text-gray-600 mt-2">Explore the weather around you...</p>
+    </div>
+  
+
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Sidebar for Weather Alerts -->
+    <div class="sidebar bg-white shadow-lg rounded-lg p-4 m-4 hidden" id="sidebar" >
+      <h2 class="text-3xl font-bold text-blue-600 text-center">Weather Alerts</h2>
+      <div class="mt-4 space-y-4">
+        <div class="border rounded-lg p-4 bg-red-50">
+          <h3 class="text-xl font-semibold text-red-600">Severe Thunderstorm Warning</h3>
+          <p>Expect strong winds and heavy rain. Stay indoors and avoid driving if possible.</p>
+        </div>
+        <div class="border rounded-lg p-4 bg-red-50">
+          <h3 class="text-xl font-semibold text-red-600">Heat Advisory</h3>
+          <p>High temperatures expected. Stay hydrated and avoid prolonged sun exposure.</p>
+        </div>
+        <div class="border rounded-lg p-4 bg-red-50">
+          <h3 class="text-xl font-semibold text-red-600">Flood Warning</h3>
+          <p>Flooding is imminent. Move to higher ground and avoid flooded areas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 bg-blue-100 p-4">
+      <div id="weather" class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6">
+        <h1 class="text-2xl font-bold mb-4 text-blue-600 text-center">5-Day Weather Forecast</h1>
+        
+        <!-- Input for City Selection -->
+        <input
+          id="cityInput"
+          type="text"
+          placeholder="Enter city (e.g., Tunis, Paris, New York)"
+          class="border border-gray-300 rounded p-2 w-full mb-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onclick="showWeather()"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        >
+          Show Weather
+        </button>
+
+        <!-- Weather Forecast Display Section -->
+        <div id="weatherContainer" class="mt-6 space-y-6"></div>
+      </div>
+      <div id="lunar-calendar" class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6 hidden" id="sidebar">
+        <h2 class="text-3xl font-bold text-blue-600 text-center">Calendrier Lunaire et Phases de la Lune</h2>
+        <div class="mt-4 space-y-4">
+          <div id="lunarPhase" class="text-center text-lg font-semibold text-gray-700"></div>
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">Prochaine éclipse</h3>
+            <p id="eclipseInfo">L'information sur les éclipses sera mise à jour chaque mois.</p>
+          </div>
+          <div id="lunarCycle" class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">Cycle Lunaire</h3>
+            <ul id="moonPhasesList" class="text-gray-700 space-y-1"></ul>
+          </div>
+        </div>
+      </div>
+      <!-- Blog Section -->
+      <div id="blog" class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6 hidden" id="sidebar">
+        <h2 class="text-3xl font-bold text-blue-600 text-center">Weather Articles</h2>
+        <div class="mt-4 space-y-4">
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">How to Prepare for a Storm: 10 Essential Tips</h3>
+            <p>Learn the steps to take to prepare for a storm, including building an emergency kit and securing your home.</p>
+          </div>
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">What is a Hurricane? Understanding Formation and Impacts</h3>
+            <p>Explore how hurricanes form, their structure, and how to stay safe during these events.</p>
+          </div>
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">How Excessive Heat Can Affect Your Health</h3>
+            <p>Discuss the dangers of heat waves and tips for staying hydrated and cool.</p>
+          </div>
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">Demystifying Weather: What You Really Need to Know</h3>
+            <p>Answer common myths about weather, such as "Bald people suffer more in heat".</p>
+          </div>
+          <div class="border rounded-lg p-4 bg-blue-50">
+            <h3 class="text-xl font-semibold">The Impact of Climate Change on Weather Events</h3>
+            <p>Discuss how climate change affects weather patterns and extreme phenomena.</p>
+          </div>
+        </div>
+      </div>
+      <div id="weatherQuiz" class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6 hidden" id="sidebar">
+        <h2 class="text-3xl font-bold text-blue-600 text-center">Météo Quiz</h2>
+        
+        <form id="quizForm" class="mt-4 space-y-4">
+          <div class="question">
+            <p class="text-xl font-semibold text-blue-700">1. Quelle est la principale cause des saisons sur Terre ?</p>
+            <label><input type="radio" name="q1" value="a" /> A. La distance de la Terre au Soleil</label><br>
+            <label><input type="radio" name="q1" value="b" /> B. L'inclinaison de l'axe de la Terre</label><br>
+            <label><input type="radio" name="q1" value="c" /> C. Le vent</label><br>
+          </div>
+          
+          <div class="question">
+            <p class="text-xl font-semibold text-blue-700">2. Quel type de nuage est généralement associé à la pluie ?</p>
+            <label><input type="radio" name="q2" value="a" /> A. Cirrostratus</label><br>
+            <label><input type="radio" name="q2" value="b" /> B. Cumulonimbus</label><br>
+            <label><input type="radio" name="q2" value="c" /> C. Stratus</label><br>
+          </div>
+          
+          <div class="question">
+            <p class="text-xl font-semibold text-blue-700">3. Quelle est la température moyenne de la surface de la Terre ?</p>
+            <label><input type="radio" name="q3" value="a" /> A. 10°C</label><br>
+            <label><input type="radio" name="q3" value="b" /> B. 14°C</label><br>
+            <label><input type="radio" name="q3" value="c" /> C. 20°C</label><br>
+          </div>
+      
+          <div class="question">
+            <p class="text-xl font-semibold text-blue-700">4. Que signifie un indice UV élevé ?</p>
+            <label><input type="radio" name="q4" value="a" /> A. La peau risque de brûler rapidement</label><br>
+            <label><input type="radio" name="q4" value="b" /> B. Le temps sera très humide</label><br>
+            <label><input type="radio" name="q4" value="c" /> C. Le ciel sera complètement dégagé</label><br>
+          </div>
+      
+          <button type="button" onclick="checkQuiz()" class="bg-blue-500 text-white px-6 py-3 rounded-lg w-full font-semibold text-lg hover:bg-blue-600 mt-6">Soumettre les réponses</button>
+        </form>
+      
+        <div id="quizResult" class="mt-4 text-lg font-semibold hidden">
+          <p id="resultText" class="text-center"></p>
+        </div>
+      </div>
+
+      <!-- Subscription Section -->
+      <div id="subscribe" class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full mx-auto mt-6 hidden" >
+        <h2 class="text-3xl font-bold text-blue-600 text-center">Premium Monthly Subscription</h2>
+        
+        <!-- Subscription Description -->
+        <div class="mt-4 p-6 bg-blue-50 rounded-lg" >
+          <h3 class="text-xl font-semibold text-blue-700">Access Premium Features</h3>
+          <ul class="mt-2 space-y-2 text-gray-700">
+            <li>✔️ Advanced Weather Forecasts</li>
+            <li>✔️ Real-time Radar Access</li>
+            <li>✔️ Ad-free Experience</li>
+            <li>✔️ Priority Customer Support</li>
+          </ul>
+          <p class="mt-4 text-lg font-bold text-gray-800">Price: <span class="text-blue-600">3 TND</span> / month</p>
+        </div>
+  
+        
+        <!-- Purchase Button -->
+        <button
+          onclick="subscribeProduct()"
+          class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg w-full font-semibold text-lg hover:bg-blue-600"
+        >
+          Subscribe Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white text-center p-4 mt-6 w-full">
+    <p>&copy; 2024 WeatherVIP &#x2600; - All Rights Reserved</p>
+  </footer>
+</body>
+</html>

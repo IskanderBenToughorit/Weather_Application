@@ -1,0 +1,33 @@
+/* Styles for layout */
+.container {
+    display: flex;
+    min-height: 100vh; /* Ensure the container takes full height */
+}
+.sidebar {
+    width: 250px; /* Width for the sidebar */
+    }
+.sidebar.fixed {
+  position: fixed;
+  top: 64px; /* Hauteur de la navbar */
+  left: 0;
+  height: calc(100% - 64px); /* Hauteur totale moins la navbar */
+  overflow-y: auto;
+}
+#lunar-calendar {
+    background-color: #fffaf0;
+}
+/* Initialement cacher toutes les sections sauf le modal */
+#mainContent {
+    display: none;
+  }
+  
+  /* Cacher les autres sections jusqu'à ce qu'elles soient affichées */
+  #weatherSection {
+    display: none;
+  }
+  
+  /* Assurez-vous que les éléments modaux sont visibles par défaut */
+  #openingModal {
+    display: block;
+  }
+  
